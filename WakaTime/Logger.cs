@@ -1,3 +1,5 @@
+// #define SAVE_LOG_IN_TEMP_INSTEAD_OF_PLUGIN_DIR
+
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -58,7 +60,11 @@ namespace WakaTime
 
         private static StreamWriter Setup()
         {
+#if SAVE_LOG_IN_TEMP_INSTEAD_OF_PLUGIN_DIR
+            var configDir = System.Environment.GetEnvironmentVariable("TEMP");
+#else // BACKWARD COMPATIBLE
             var configDir = Dependencies.AppDataDirectory;
+#endif
             if (string.IsNullOrWhiteSpace(configDir)) return null;
 
             var filename = $"{configDir}\\{Constants.PluginName}.log";
